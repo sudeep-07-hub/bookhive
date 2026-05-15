@@ -1,0 +1,82 @@
+import React, { useEffect, useState } from 'react';
+import api from '../../features/api';
+import toast from 'react-hot-toast';
+import { motion } from 'framer-motion';
+
+const ManageOrders = () => {
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchOrders = async () => {
+    try {
+      const { data } = await api.get('/api/orders');
+      setOrders(data);
+      setLoading(false);
+    } catch (error) {
+      toast.error('Failed to load orders');
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchOrders();
+  }, []);
+
+  const handleDeliver = async (id) => {
+    try {
+      await api.put(`/api/orders/${id}/deliver`);
+      toast.success('Order marked as delivered');
+      fetchOrders();
+    } catch (error) {
+      toast.error('Failed to update order');
+    }
+  };
+
+  if (loading) {
+    return <div className="flex justify-center items-center min-h-[60vh]"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-500"></div></div>;
+  }
+
+  return (
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="container mx-auto px-4 py-8">
+      <h1 className="text-3xl font-bold mb-8 text-slate-800 dark:text-white">Manage Orders</h1>
+      <div className="bg-white dark:bg-slate-800 rounded-xl shadow-lg overflow-x-auto">
+        <table className="w-full text-left border-collapse">
+          <thead>
+            <tr className="bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300">
+              <th className="p-4 border-b dark:border-slate-600">ID</th>
+              <th className="p-4 border-b dark:border-slate-600">USER</th>
+              <th className="p-4 border-b dark:border-slate-600">DATE</th>
+              <th className="p-4 border-b dark:border-slate-600">TOTAL</th>
+              <th className="p-4 border-b dark:border-slate-600">PAID</th>
+              <th className="p-4 border-b dark:border-slate-600">DELIVERED</th>
+              <th className="p-4 border-b dark:border-slate-600">ACTIONS</th>
+            </tr>
+          </thead>
+          <tbody>
+            {orders.map((order) => (
+              <tr key={order._id} className="border-b dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 transition">
+                <td className="p-4 text-slate-800 dark:text-slate-300">{order._id.substring(0, 10)}...</td>
+                <td className="p-4 text-slate-800 dark:text-slate-300">{order.user && order.user.name}</td>
+                <td className="p-4 text-slate-800 dark:text-slate-300">{order.createdAt.substring(0, 10)}</td>
+                <td className="p-4 text-slate-800 dark:text-slate-300">${order.totalAmount}</td>
+                <td className="p-4 text-slate-800 dark:text-slate-300">
+                  {order.isPaid ? order.paidAt.substring(0, 10) : <span className="text-red-500">No</span>}
+                </td>
+                <td className="p-4 text-slate-800 dark:text-slate-300">
+                  {order.isDelivered ? order.deliveredAt.substring(0, 10) : <span className="text-red-500">No</span>}
+                </td>
+                <td className="p-4">
+                  {!order.isDelivered && (
+                    <button onClick={() => handleDeliver(order._id)} className="bg-emerald-500 text-white px-3 py-1 rounded hover:bg-emerald-600 transition">Mark Delivered</button>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </motion.div>
+  );
+};
+
+export default ManageOrders;

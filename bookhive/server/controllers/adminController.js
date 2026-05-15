@@ -34,3 +34,28 @@ export const deleteUser = async (req, res, next) => {
     next(error);
   }
 };
+
+// @desc    Get Admin Stats
+// @route   GET /api/admin/stats
+// @access  Private/Admin
+export const getAdminStats = async (req, res, next) => {
+  try {
+    const usersCount = await User.countDocuments({});
+    const Book = (await import('../models/Book.js')).default;
+    const Order = (await import('../models/Order.js')).default;
+    const booksCount = await Book.countDocuments({});
+    const ordersCount = await Order.countDocuments({});
+    
+    const orders = await Order.find({});
+    const revenue = orders.reduce((acc, item) => acc + item.totalAmount, 0);
+
+    res.json({
+      users: usersCount,
+      books: booksCount,
+      orders: ordersCount,
+      revenue: revenue.toFixed(2)
+    });
+  } catch (error) {
+    next(error);
+  }
+};

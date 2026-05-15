@@ -45,9 +45,12 @@ const Navbar = () => {
                   <FiUser className="w-5 h-5 mr-1" />
                   <span className="hidden sm:inline">{userInfo.name}</span>
                 </Link>
+                <Link to="/orders" className="text-gray-700 dark:text-gray-300 hover:text-primary-500 font-medium transition-colors">
+                  Orders
+                </Link>
                 {userInfo.role === 'Admin' && (
-                  <Link to="/admin/dashboard" className="text-accent-500 hover:text-accent-600 font-medium transition-colors">
-                    Dashboard
+                  <Link to="/admin" className="text-accent-500 hover:text-accent-600 font-medium transition-colors">
+                    Admin
                   </Link>
                 )}
                 <button onClick={handleLogout} className="text-gray-500 hover:text-red-500 transition-colors">

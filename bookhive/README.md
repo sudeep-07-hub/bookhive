@@ -1,98 +1,118 @@
-# BookHive – Online Book Store Platform
+# BookHive - Online Book Store
 
-BookHive is a premium, modern full-stack online bookstore application built with the MERN stack (MongoDB, Express, React, Node.js). It features a sleek UI with glassmorphism, Framer Motion animations, and a fully functional backend.
+BookHive is a complete, production-ready full-stack MERN (MongoDB, Express, React, Node.js) ecommerce application for an online book store. 
 
-## 🚀 Features
+## Features
 
-- **User Authentication**: JWT-based secure login and registration with Role-Based Access Control (User/Admin).
-- **Product Catalog**: Browse and search for books with a modern layout.
-- **Shopping Cart**: Add books to the cart and view order summary.
-- **Admin Dashboard**: Manage users, orders, and books (Backend prepared).
-- **Responsive UI**: Built with Tailwind CSS for mobile, tablet, and desktop viewing.
-- **State Management**: Redux Toolkit used for managing global states like Auth, Cart, and Products.
+- **User Authentication**: JWT-based authentication with bcrypt password hashing.
+- **Role-Based Access**: Separation of User and Admin roles.
+- **Product Catalog**: Browse, search, and filter books.
+- **Shopping Cart**: Add/remove items, update quantities.
+- **Checkout Flow**: Complete shipping and payment simulation to place orders.
+- **User Profile**: Order history and profile management.
+- **Admin Dashboard**: Analytics, revenue tracking, user management, order processing, and book inventory management.
+- **Modern UI**: Built with React, Tailwind CSS, and Framer Motion for premium aesthetics.
 
-## 🛠 Tech Stack
+## Technology Stack
 
-**Frontend:**
-- React (Vite)
-- Tailwind CSS
-- Redux Toolkit
-- React Router DOM
-- Framer Motion
-- React Hot Toast
+- **Frontend**: React.js, Vite, Tailwind CSS, Redux Toolkit, Framer Motion, Axios.
+- **Backend**: Node.js, Express.js.
+- **Database**: MongoDB Atlas, Mongoose.
+- **Deployment**: Vercel (Frontend), Render (Backend).
 
-**Backend:**
-- Node.js & Express.js
-- MongoDB & Mongoose
-- JSON Web Tokens (JWT)
-- bcryptjs
+---
 
-## 📦 Installation
+## Getting Started
 
-1. **Clone the repository** (if not done already)
-   ```bash
-   git clone <repo-url>
-   cd bookhive
-   ```
+### Prerequisites
+- Node.js (v16+)
+- MongoDB Atlas account (or local MongoDB)
 
-2. **Install Dependencies**
-   Run the following command at the root to install dependencies for both client and server:
-   ```bash
-   npm run install-all
-   ```
+### Environment Variables
+You will need to configure environment variables.
 
-3. **Environment Variables**
-   Create a `.env` file in the `server` directory with the following:
-   ```env
-   PORT=5000
-   NODE_ENV=development
-   MONGO_URI=mongodb://localhost:27017/bookhive
-   JWT_SECRET=yoursupersecretkey
-   ```
+**Backend (`server/.env`)**
+```env
+NODE_ENV=development
+PORT=5000
+MONGO_URI=your_mongodb_connection_string
+JWT_SECRET=your_jwt_secret
+```
 
-4. **Seed Database (Optional)**
-   To populate the database with initial books and an admin user, run:
-   ```bash
-   cd server
-   npm run seed
-   ```
+**Frontend** 
+Update the `baseURL` in `client/src/features/api.js` if running in production.
+```javascript
+baseURL: 'https://your-backend-url.onrender.com'
+```
 
-5. **Run the Application**
-   From the root directory, run both frontend and backend concurrently:
-   ```bash
-   npm run dev
-   ```
+### Installation
 
-   - Frontend: `http://localhost:5173`
-   - Backend: `http://localhost:5000`
+1. **Clone the repository and install dependencies**
+```bash
+# Install Server dependencies
+cd server
+npm install
 
-## 🌐 API Routes
+# Install Client dependencies
+cd ../client
+npm install
+```
 
-### Auth
-- `POST /api/auth/register` - Register a new user
-- `POST /api/auth/login` - Login user
-- `GET /api/auth/profile` - Get logged in user profile
+2. **Seed the Database** (Optional, for demo data)
+```bash
+cd server
+npm run seed
+```
 
-### Books
-- `GET /api/books` - Fetch all books
-- `GET /api/books/:id` - Fetch single book
-- `POST /api/books` - Create a book (Admin)
-- `PUT /api/books/:id` - Update a book (Admin)
-- `DELETE /api/books/:id` - Delete a book (Admin)
+3. **Run the Application Locally**
 
-### Orders
-- `POST /api/orders` - Place an order
-- `GET /api/orders/myorders` - Get user orders
-- `GET /api/orders/:id` - Get order details
+*Run Backend:*
+```bash
+cd server
+npm run dev
+```
 
-### Admin
-- `GET /api/admin/users` - Get all users
-- `DELETE /api/admin/users/:id` - Delete a user
+*Run Frontend:*
+```bash
+cd client
+npm run dev
+```
 
-## 🚢 Deployment
+---
+
+## Deployment
 
 ### Frontend (Vercel)
-- The root contains a `vercel.json` file configured to deploy the Vite React app from the `client/` directory.
+The `client` directory is pre-configured for Vercel deployment.
+1. Create a new project on Vercel and import the repository.
+2. Set the Root Directory to `client`.
+3. Vercel will automatically detect Vite and use `npm run build`.
+4. Ensure the backend URL is updated in your `api.js` file before deploying.
 
 ### Backend (Render)
-- A `render.yaml` file is provided in the `server/` directory for deploying the Node/Express backend to Render.com. Ensure you set the environment variables in your Render dashboard.
+The `server` directory contains a `render.yaml` for easy deployment on Render.
+1. Create a new Web Service on Render.
+2. Set the Root Directory to `server`.
+3. Build Command: `npm install`
+4. Start Command: `npm start`
+5. Add your `.env` variables (MONGO_URI, JWT_SECRET) in the Render dashboard.
+
+## API Documentation
+
+| Endpoint | Method | Access | Description |
+|---|---|---|---|
+| `/api/auth/register` | POST | Public | Register new user |
+| `/api/auth/login` | POST | Public | Authenticate user & get token |
+| `/api/auth/profile` | GET/PUT | Private | Get/Update user profile |
+| `/api/books` | GET | Public | Fetch all books |
+| `/api/books/:id` | GET | Public | Fetch single book |
+| `/api/books` | POST | Admin | Create a new book |
+| `/api/books/:id` | PUT/DELETE | Admin | Update/Delete a book |
+| `/api/orders` | POST | Private | Create new order |
+| `/api/orders/myorders` | GET | Private | Get user orders |
+| `/api/orders/:id/deliver` | PUT | Admin | Update order to delivered |
+| `/api/admin/stats` | GET | Admin | Get dashboard statistics |
+| `/api/admin/users` | GET | Admin | Get all users |
+
+---
+**Developed for production scale.**
