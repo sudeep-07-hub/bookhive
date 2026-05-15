@@ -10,7 +10,4 @@ const store = configureStore({
     books: booksReducer,
   },
 });
-
-export default store;
-
 export default store;
