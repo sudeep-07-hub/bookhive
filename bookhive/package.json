@@ -1,0 +1,10 @@
+{
+  "name": "bookhive",
+  "version": "1.0.0",
+  "description": "BookHive Online Book Store Platform - Stateless Frontend",
+  "scripts": {
+    "dev": "npm run dev --prefix client",
+    "build": "npm run build --prefix client",
+    "install-all": "npm install --prefix client"
+  }
+}
