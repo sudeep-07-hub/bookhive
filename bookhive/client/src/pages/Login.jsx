@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { login } from '../features/authSlice';
 import toast from 'react-hot-toast';
@@ -11,14 +11,18 @@ const Login = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const redirectParams = new URLSearchParams(location.search).get('redirect');
+  const redirect = redirectParams ? `/${redirectParams}` : '/';
 
   const { userInfo, loading, error } = useSelector((state) => state.auth);
 
   useEffect(() => {
     if (userInfo) {
-      navigate('/');
+      navigate(redirect);
     }
-  }, [navigate, userInfo]);
+  }, [navigate, userInfo, redirect]);
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -80,7 +84,7 @@ const Login = () => {
         </form>
         <div className="text-center text-sm text-gray-500 dark:text-gray-400">
           New Customer?{' '}
-          <Link to="/register" className="font-medium text-primary-600 hover:text-primary-500">
+          <Link to={location.search ? `/register${location.search}` : '/register'} className="font-medium text-primary-600 hover:text-primary-500">
             Register Here
           </Link>
         </div>
