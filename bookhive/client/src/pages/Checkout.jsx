@@ -7,7 +7,8 @@ import { motion } from 'framer-motion';
 import { clearCart } from '../features/cartSlice';
 
 const Checkout = () => {
-  const { cartItems, cartTotalAmount } = useSelector((state) => state.cart);
+  const { cartItems } = useSelector((state) => state.cart);
+  const cartTotalAmount = cartItems ? cartItems.reduce((acc, item) => acc + item.quantity * item.price, 0) : 0;
   const { userInfo } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -24,10 +25,10 @@ const Checkout = () => {
       const orderData = {
         orderedItems: cartItems.map((item) => ({
           name: item.title,
-          qty: item.cartQuantity,
+          qty: item.quantity,
           image: item.image,
           price: item.price,
-          book: item._id,
+          book: item.book || item._id,
         })),
         shippingDetails: { address, city, postalCode, country },
         paymentMethod,
